@@ -1,0 +1,106 @@
+{
+  "slots": {
+    "0": {
+      "name": "slot6",
+      "type": {
+        "events": [],
+        "methods": []
+      }
+    },
+    "-1": {
+      "name": "unit",
+      "type": {
+        "events": [],
+        "methods": []
+      }
+    },
+    "-2": {
+      "name": "system",
+      "type": {
+        "events": [],
+        "methods": []
+      }
+    },
+    "-3": {
+      "name": "library",
+      "type": {
+        "events": [],
+        "methods": []
+      }
+    }
+  },
+  "handlers": [
+    {
+      "code": "code0",
+      "filter": {
+        "args": [],
+        "signature": "start()",
+        "slotKey": "0"
+      },
+      "key": "0"
+    },
+    {
+      "code": "code1",
+      "filter": {
+        "args": [],
+        "signature": "stop()",
+        "slotKey": "-1"
+      },
+      "key": "1"
+    },
+    {
+      "code": "code2",
+      "filter": {
+        "args": [
+          {
+            "value": "Live"
+          }
+        ],
+        "signature": "tick(timerId)",
+        "slotKey": "-1"
+      },
+      "key": "2"
+    },
+    {
+      "code": "code3",
+      "filter": {
+        "args": [
+          {
+            "value": "option2"
+          }
+        ],
+        "signature": "actionStart(action)",
+        "slotKey": "-2"
+      },
+      "key": "3"
+    },
+    {
+      "code": "code4",
+      "filter": {
+        "args": [
+          {
+            "value": "option1"
+          }
+        ],
+        "signature": "actionStart(action)",
+        "slotKey": "-2"
+      },
+      "key": "4"
+    },
+    {
+      "code": "code5",
+      "filter": {
+        "args": [
+          {
+            "value": "option3"
+          }
+        ],
+        "signature": "actionStart(action)",
+        "slotKey": "-2"
+      },
+      "key": "5"
+    }
+  ],
+  "methods": [],
+  "events": []
+}
