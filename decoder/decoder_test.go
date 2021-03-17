@@ -13,7 +13,7 @@ func TestRun(t *testing.T) {
 		InputFilePath:   "../test/resources/first.json",
 		OutputDirectory: path.Join(os.TempDir(), "project"),
 	}
-	assert.NoError(t, os.RemoveAll(options.OutputDirectory))
+	_ = os.RemoveAll(options.OutputDirectory)
 
 	logrus.Info("decode options ", options)
 	err := Run(options)
