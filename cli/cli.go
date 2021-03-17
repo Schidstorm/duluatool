@@ -15,13 +15,6 @@ func Run() {
 		workingDir = ""
 	}
 
-	helpCommand := &cobra.Command{
-		RunE: func(cmd *cobra.Command, args []string) error {
-			return cmd.Parent().Help()
-		},
-		Use: "help",
-	}
-
 	decodeCommand := &cobra.Command{
 		Use: "decode",
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -44,7 +37,6 @@ func Run() {
 
 	decodeCommand.PersistentFlags().String("file", path.Join(workingDir, "code.json"), "Input file name in json format.")
 	decodeCommand.PersistentFlags().String("dir", workingDir, "Output directory where to put the file structure.")
-	decodeCommand.AddCommand(helpCommand)
 
 	encodeCommand := &cobra.Command{
 		Use: "encode",
@@ -67,10 +59,8 @@ func Run() {
 	}
 	encodeCommand.PersistentFlags().String("file", path.Join(workingDir, "code.json"), "Output file name.")
 	encodeCommand.PersistentFlags().String("dir", workingDir, "Input directory.")
-	encodeCommand.AddCommand(helpCommand)
 
 	rootCmd := &cobra.Command{}
-	rootCmd.AddCommand(helpCommand)
 	rootCmd.AddCommand(decodeCommand)
 	rootCmd.AddCommand(encodeCommand)
 
