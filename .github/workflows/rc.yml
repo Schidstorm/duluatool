@@ -1,0 +1,60 @@
+
+name: Go
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: get project name
+      uses: jungwinter/split@v1
+      id: split
+      with:
+        msg: ${{ github.repository }}
+        seperator: '/'
+
+    - name: Set up Go
+      uses: actions/setup-go@v2
+      with:
+        go-version: 1.15
+
+    - name: Build
+      run: go build -v -o ${{ steps.split.outputs._1 }}-win64.exe .
+      env:
+        GOOS: windows
+        GOARCH: amd64
+        
+    - name: Build
+      run: go build -v -o ${{ steps.split.outputs._1 }}-linux64 .
+      env:
+        GOOS: linux
+        GOARCH: amd64
+        
+    - name: Build
+      run: go build -v -o ${{ steps.split.outputs._1 }}-win32.exe .
+      env:
+        GOOS: windows
+        GOARCH: "386"
+        
+    - name: Build
+      run: go build -v -o ${{ steps.split.outputs._1 }}-linux32 .
+      env:
+        GOOS: linux
+        GOARCH: "386"
+
+    - uses: "marvinpinto/action-automatic-releases@latest"
+      with:
+        repo_token: "${{ secrets.GITHUB_TOKEN }}"
+        automatic_release_tag: "release"
+        prerelease: false
+        title: "Release"
+        files: |
+          ${{ steps.split.outputs._1 }}-*
