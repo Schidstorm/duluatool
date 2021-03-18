@@ -1,6 +1,7 @@
 package encoder
 
 type Options struct {
-	OutputFilePath string
-	InputDirectory string
+	OutputFilePath  string
+	OutputClipboard bool
+	InputDirectory  string
 }

@@ -2,6 +2,7 @@ package encoder
 
 import (
 	"encoding/json"
+	"github.com/atotto/clipboard"
 	"github.com/schidstorm/duluatool/structure"
 	"github.com/sirupsen/logrus"
 	"io/ioutil"
@@ -22,9 +23,16 @@ func Run(options *Options) error {
 		return err
 	}
 
-	err = ioutil.WriteFile(options.OutputFilePath, buffer, os.ModePerm)
-	if err != nil {
-		return err
+	if options.OutputClipboard {
+		err = clipboard.WriteAll(string(buffer))
+		if err != nil {
+			return err
+		}
+	} else {
+		err = ioutil.WriteFile(options.OutputFilePath, buffer, os.ModePerm)
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil
