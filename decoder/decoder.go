@@ -3,6 +3,7 @@ package decoder
 import (
 	"encoding/json"
 	"github.com/atotto/clipboard"
+	"github.com/schidstorm/duluatool/constants"
 	"github.com/schidstorm/duluatool/structure"
 	"github.com/sirupsen/logrus"
 	"io/ioutil"
@@ -41,8 +42,8 @@ func parseEncoded(buffer []byte) (*structure.Encoded, error) {
 
 func prepareSlots(options *Options, encoded *structure.Encoded) {
 	for slotKey, slot := range encoded.Slots {
-		slotDir := path.Join(options.OutputDirectory, "slot", slot.Name)
-		handlerDir := path.Join(slotDir, "handler")
+		slotDir := path.Join(options.OutputDirectory, constants.Current.SlotDirectoryName, slot.Name)
+		handlerDir := path.Join(slotDir, constants.Current.HandlerDirectoryName)
 		err := os.MkdirAll(handlerDir, os.ModePerm)
 		writeSlotMetaFile(options, slotKey, slot)
 		if err != nil {
@@ -57,8 +58,8 @@ func writeSlotMetaFile(options *Options, slotKey string, slot structure.Slot) {
 		SlotKey: slotKey,
 		Slot:    slot,
 	}
-	slotDir := path.Join(options.OutputDirectory, "slot", slot.Name)
-	writeJsonMetadata(path.Join(slotDir, "meta.json"), &slotMeta)
+	slotDir := path.Join(options.OutputDirectory, constants.Current.SlotDirectoryName, slot.Name)
+	writeJsonMetadata(path.Join(slotDir, constants.Current.SlotMetaFileName), &slotMeta)
 }
 
 func writeHandlerFiles(options *Options, encoded *structure.Encoded) {
@@ -75,8 +76,8 @@ func writeHandlerFiles(options *Options, encoded *structure.Encoded) {
 }
 
 func writeCodeFile(options *Options, slot structure.Slot, handler structure.Handler) {
-	slotDir := path.Join(options.OutputDirectory, "slot", slot.Name)
-	handlerDir := path.Join(slotDir, "handler")
+	slotDir := path.Join(options.OutputDirectory, constants.Current.SlotDirectoryName, slot.Name)
+	handlerDir := path.Join(slotDir, constants.Current.HandlerDirectoryName)
 	err := ioutil.WriteFile(path.Join(handlerDir, handler.Key+".lua"), []byte(handler.Code), os.ModePerm)
 	if err != nil {
 		logrus.Warn(err)
@@ -84,8 +85,8 @@ func writeCodeFile(options *Options, slot structure.Slot, handler structure.Hand
 }
 
 func writeHandlerMetaFile(options *Options, slot structure.Slot, handler structure.Handler) {
-	slotDir := path.Join(options.OutputDirectory, "slot", slot.Name)
-	handlerDir := path.Join(slotDir, "handler")
+	slotDir := path.Join(options.OutputDirectory, constants.Current.SlotDirectoryName, slot.Name)
+	handlerDir := path.Join(slotDir, constants.Current.HandlerDirectoryName)
 	writeJsonMetadata(path.Join(handlerDir, handler.Key+".json"), &handler)
 }
 

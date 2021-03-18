@@ -3,6 +3,7 @@ package encoder
 import (
 	"encoding/json"
 	"github.com/atotto/clipboard"
+	"github.com/schidstorm/duluatool/constants"
 	"github.com/schidstorm/duluatool/structure"
 	"github.com/sirupsen/logrus"
 	"io/ioutil"
@@ -39,7 +40,7 @@ func Run(options *Options) error {
 }
 
 func generateEncoded(directory string) (*structure.Encoded, error) {
-	slotsDir := path.Join(directory, "slot")
+	slotsDir := path.Join(directory, constants.Current.SlotDirectoryName)
 	slotsFileInfo, err := ioutil.ReadDir(slotsDir)
 	if err != nil {
 		return nil, err
@@ -61,7 +62,7 @@ func generateEncoded(directory string) (*structure.Encoded, error) {
 			}
 
 			encoded.Slots[slotMeta.SlotKey] = slotMeta.Slot
-			encoded.Handlers = append(encoded.Handlers, readSlotHandlers(path.Join(slotDir, "handler"))...)
+			encoded.Handlers = append(encoded.Handlers, readSlotHandlers(path.Join(slotDir, constants.Current.HandlerDirectoryName))...)
 		}
 	}
 
@@ -72,7 +73,7 @@ func generateEncoded(directory string) (*structure.Encoded, error) {
 
 func readSlotMeta(directory string) (structure.SlotMeta, error) {
 	slotMeta := structure.SlotMeta{}
-	slotMetadata, err := ioutil.ReadFile(path.Join(directory, "meta.json"))
+	slotMetadata, err := ioutil.ReadFile(path.Join(directory, constants.Current.SlotMetaFileName))
 	if err != nil {
 		return slotMeta, err
 	}
