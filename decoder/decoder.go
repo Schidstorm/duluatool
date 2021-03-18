@@ -2,6 +2,7 @@ package decoder
 
 import (
 	"encoding/json"
+	"github.com/atotto/clipboard"
 	"github.com/schidstorm/duluatool/structure"
 	"github.com/sirupsen/logrus"
 	"io/ioutil"
@@ -10,9 +11,19 @@ import (
 )
 
 func Run(options *Options) error {
-	buffer, err := ioutil.ReadFile(options.InputFilePath)
-	if err != nil {
-		return err
+	var buffer []byte
+	var err error
+	if options.InputClipboard {
+		cpString, err := clipboard.ReadAll()
+		if err != nil {
+			return err
+		}
+		buffer = []byte(cpString)
+	} else {
+		buffer, err = ioutil.ReadFile(options.InputFilePath)
+		if err != nil {
+			return err
+		}
 	}
 
 	encoded, err := parseEncoded(buffer)
