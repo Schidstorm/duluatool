@@ -10,7 +10,6 @@ import (
 	"os"
 	"path"
 	"sort"
-	"strings"
 )
 
 func Run(options *Options) error {
@@ -94,9 +93,9 @@ func readSlotHandlers(directory string) []structure.Handler {
 		return handlers
 	}
 
-	for _, handlerFileInfo := range handlersFileInfo {
-		if !handlerFileInfo.IsDir() && strings.HasSuffix(handlerFileInfo.Name(), ".json") {
-			handler, err := readHandler(path.Join(directory, handlerFileInfo.Name()))
+	for _, handlerDirInfo := range handlersFileInfo {
+		if handlerDirInfo.IsDir() {
+			handler, err := readHandler(path.Join(directory, handlerDirInfo.Name()))
 			if err != nil {
 				logrus.Warn(err)
 			} else {
@@ -108,11 +107,12 @@ func readSlotHandlers(directory string) []structure.Handler {
 	return handlers
 }
 
-func readHandler(metadataFilePath string) (structure.Handler, error) {
+func readHandler(handlerDir string) (structure.Handler, error) {
 	handler := structure.Handler{}
-	codePath := path.Join(path.Dir(metadataFilePath), strings.TrimSuffix(path.Base(metadataFilePath), ".json")+".lua")
+	codePath := path.Join(handlerDir, constants.Current.HandlerCodeFileName)
+	metaPath := path.Join(handlerDir, constants.Current.HandlerMetaFileName)
 
-	metadataBuffer, err := ioutil.ReadFile(metadataFilePath)
+	metadataBuffer, err := ioutil.ReadFile(metaPath)
 	if err != nil {
 		return handler, err
 	}
@@ -124,7 +124,7 @@ func readHandler(metadataFilePath string) (structure.Handler, error) {
 
 	codeBuffer, err := ioutil.ReadFile(codePath)
 	if err != nil {
-		logrus.Warnf("handler %s doesnt have a code file %s", metadataFilePath, codePath)
+		logrus.Warnf("handler %s doesnt have a code file %s", handlerDir, codePath)
 		return handler, nil
 	} else {
 		handler.Code = string(codeBuffer)
